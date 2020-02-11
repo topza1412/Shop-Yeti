@@ -4,12 +4,6 @@
 //insert data
 if($_REQUEST['admin']=='insert'){
 
-    if($_REQUEST['discount']>$_REQUEST['price']){
-
-        Alert_Return('ส่วนลดต้องน้อยกว่าราคาขาย!');
-    }
-    else {
-
 //check data ซ้ำ โดย check ตามชื่อฟิลด์ที่กำหนด ถ้า ซ้ำกันจะไม่สามารถเพิ่มข้อมูลได้
 $sql = $conn->query("select * from product where Pro_Name = '$_REQUEST[name]'")or die (mysqli_error());
 
@@ -32,7 +26,7 @@ Upload_File ($filename,$folder,$width,$height);
 
 
 //เพิ่มข้อมูลลง table ที่กำหนด โดยให้ชื่อฟิลด์ใน table ใน db = ค่าที่รับมา
-$sql = $conn->query("insert product set Pro_Img = '$filename',Pro_Name = '$_REQUEST[name]',Pro_Detail = '$detail',Pro_Price = '$_REQUEST[price]',Pro_Discount = '$_REQUEST[discount]',Pro_Amount = '$_REQUEST[amount]',Pro_Date = now()");
+$sql = $conn->query("insert product set Pro_Img = '$filename',Pro_Name = '$_REQUEST[name]',Pro_Detail = '$detail',Pro_Price = '$_REQUEST[price]',Pro_Amount = '$_REQUEST[amount]',Pro_Date = now()");
 
 
 //function check เพิ่มข้อมูล จะมี alert ขึ้นมา ตามเงื่อนไข
@@ -42,17 +36,9 @@ Chk_Insert($sql,'เพิ่มข้อมูลเรียบร้อย','
 
 }
 
-}
-
 
 //update data
 if($_REQUEST['admin']=='update'){
-
-    if($_REQUEST['discount']>$_REQUEST['price']){
-
-        Alert_Return('ส่วนลดต้องน้อยกว่าราคาขาย!');
-    }
-    else {
 
 //check data ซ้ำ โดย check ตามชื่อฟิลด์ที่กำหนด ถ้า ซ้ำกันจะไม่สามารถแก้ไขข้อมูลได้
 $sql = $conn->query("select * from product where Pro_Name = '$_REQUEST[name]' && Pro_ID != '$_REQUEST[id]'")or die (mysqli_error());
@@ -77,21 +63,19 @@ if($file){
 Upload_File ($filename,$folder,$width,$height);
 
 //แก้ไขข้อมูลลง table ที่กำหนด โดยให้ชื่อฟิลด์ใน table ใน db = ค่าที่รับมา โดยข้อมูลที่แก้จะเปลี่ยนแปลงตาม id ของ รายการนั้น
-$sql = $conn->query("update product set Pro_Img = '$filename',Pro_Name = '$_REQUEST[name]',Pro_Detail = '$detail',Pro_Price = '$_REQUEST[price]',Pro_Discount = '$_REQUEST[discount]',Pro_Amount = '$_REQUEST[amount]' where Pro_ID = '$_REQUEST[id]'")or die (mysqli_error());
+$sql = $conn->query("update product set Pro_Img = '$filename',Pro_Name = '$_REQUEST[name]',Pro_Detail = '$detail',Pro_Price = '$_REQUEST[price]',Pro_Amount = '$_REQUEST[amount]' where Pro_ID = '$_REQUEST[id]'")or die (mysqli_error());
 
 }
 
 else {
 
 //แก้ไขข้อมูลลง table ที่กำหนด โดยให้ชื่อฟิลด์ใน table ใน db = ค่าที่รับมา โดยข้อมูลที่แก้จะเปลี่ยนแปลงตาม id ของ รายการนั้น
-$sql = $conn->query("update product set Pro_Name = '$_REQUEST[name]',Pro_Detail = '$detail',Pro_Price = '$_REQUEST[price]',Pro_Discount = '$_REQUEST[discount]',Pro_Amount = '$_REQUEST[amount]' where Pro_ID = '$_REQUEST[id]'")or die (mysqli_error());
+$sql = $conn->query("update product set Pro_Name = '$_REQUEST[name]',Pro_Detail = '$detail',Pro_Price = '$_REQUEST[price]',Pro_Amount = '$_REQUEST[amount]' where Pro_ID = '$_REQUEST[id]'")or die (mysqli_error());
 
 }
 
 //function check แก้ไขข้อมูล จะมี alert ขึ้นมา ตามเงื่อนไข
 Chk_Update($sql,'แก้ไขข้อมูลเรียบร้อย');
-}
-
 }
 
 }
@@ -368,10 +352,10 @@ Chk_Delete($sql,'ลบข้อมูลเรียบร้อย');
 			$start = ($page - 1) * $perpage;
 
 //แสดงข้อมูลตามเงื่อนไข และ มีการแบ่งหน้ารายการ
-$sql = $conn->query("select * from product where Pro_ID desc limit $start,$perpage")or die (mysqli_error());
+$sql = $conn->query("select * from product order by Pro_ID desc limit $start,$perpage")or die (mysqli_error());
 
 //หาจำนวน row ทั้งหมด ของ ข้อมูลที่ถูกแสดงเพื่อจะเอาไปทำการแบ่งหน้า
-$sql2 = $conn->query("select * from product  where order by Pro_ID desc")or die (mysqli_error());
+$sql2 = $conn->query("select * from product order by Pro_ID desc")or die (mysqli_error());
 $total_record = $sql2->num_rows;
 $total_page = ceil($total_record / $perpage);
 
